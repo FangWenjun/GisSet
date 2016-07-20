@@ -33,7 +33,7 @@
             // 
             // addlayer
             // 
-            this.addlayer.Location = new System.Drawing.Point(95, 73);
+            this.addlayer.Location = new System.Drawing.Point(61, 37);
             this.addlayer.Name = "addlayer";
             this.addlayer.Size = new System.Drawing.Size(75, 23);
             this.addlayer.TabIndex = 0;
@@ -47,7 +47,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.addlayer);
             this.Name = "GisSetControl";
-            this.Size = new System.Drawing.Size(407, 239);
+            this.Size = new System.Drawing.Size(224, 127);
             this.ResumeLayout(false);
 
         }

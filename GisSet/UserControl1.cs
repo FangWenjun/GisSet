@@ -38,12 +38,26 @@ namespace GisSet
 
         private void addlayer_Click(object sender, EventArgs e)
         {
-            System.Windows.Forms.FolderBrowserDialog folder = new System.Windows.Forms.FolderBrowserDialog();
+            //System.Windows.Forms.FolderBrowserDialog folder = new System.Windows.Forms.FolderBrowserDialog();
 
-            if (folder.ShowDialog() == DialogResult.OK)
+            //if (folder.ShowDialog() == DialogResult.OK)
+            //{
+            //    MapPath = folder.SelectedPath;
+            //    AddLayerToMap(map);
+            //}
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = Environment.CurrentDirectory.ToString();
+            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*" ;//设置打开文件类型
+            openFileDialog1.FilterIndex = 2 ;
+            openFileDialog1.RestoreDirectory = true ;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                MapPath = folder.SelectedPath;
-                AddLayerToMap(map);
+                if (openFileDialog1.FileName != "")
+                {
+                   // MessageBox.Show("你选择了" + openFileDialog1.FileName);//得到文件路径
+                    MapPath = openFileDialog1.FileName;
+                    AddLayerToMap(map);
+                }
             }
         }
 
