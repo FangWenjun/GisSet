@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using System.Diagnostics;
 using AxMapWinGIS;
 using MapWinGIS;
 
@@ -38,13 +40,7 @@ namespace GisSet
 
         private void addlayer_Click(object sender, EventArgs e)
         {
-            //System.Windows.Forms.FolderBrowserDialog folder = new System.Windows.Forms.FolderBrowserDialog();
-
-            //if (folder.ShowDialog() == DialogResult.OK)
-            //{
-            //    MapPath = folder.SelectedPath;
-            //    AddLayerToMap(map);
-            //}
+            
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             openFileDialog1.InitialDirectory = Environment.CurrentDirectory.ToString();
             openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*" ;//设置打开文件类型
@@ -56,14 +52,31 @@ namespace GisSet
                 {
                    // MessageBox.Show("你选择了" + openFileDialog1.FileName);//得到文件路径
                     MapPath = openFileDialog1.FileName;
-                    AddLayerToMap(map);
+                    AddLayerToMap(map,MapPath);
                 }
             }
         }
 
-        private int AddLayerToMap(AxMap MapSet)
+        private void AddLayerToMap(AxMap MapSet, string dataPath)
         {
-            return MapSet.AddLayerFromFilename(MapPath, tkFileOpenStrategy.fosAutoDetect, true);
+            MapSet.RemoveAllLayers();
+            MapSet.LockWindow(tkLockMode.lmLock);
+            try
+            {
+                int layerHandle = -1;
+                Shapefile sf = new Shapefile();
+                if (sf.Open(dataPath, null))
+                    layerHandle = MapSet.AddLayer(sf, true);
+                else
+                    MessageBox.Show(sf.ErrorMsg[sf.LastErrorCode]);
+                if (layerHandle != -1)
+                    MapSet.set_LayerName(layerHandle, Path.GetFileName(dataPath));
+            }
+            finally
+            {
+                MapSet.LockWindow(tkLockMode.lmUnlock);
+                Debug.Print("Layers added to the map:" + MapSet.NumLayers);
+            }
         }
     }
 }
